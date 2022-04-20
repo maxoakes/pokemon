@@ -1,0 +1,135 @@
+TURN PHASE
+
+A turn consists of four phases done in order:
+
+Each player chooses a command for each Pokémon in battle, at the same time.
+For each Pokémon in battle he or she controls, a player does one of the following:
+        have the Pokémon use one of its moves;
+        use an item from the Bag (in battles that allow it);
+        or switch it out for another Pokémon (that Pokémon must be an unfainted Pokémon not in battle, and not an Egg, controlled by that player).
+If a player chooses an item:
+        it’s used immediately, at that point.
+Switching Pokémon (resolved in " Turn order ")
+Attacks
+End-of-turn effects
+
+
+
+PRIORITY AND TURN ORDER
+
+The order in which attacks will strike is set just after all commands are chosen, and again at the end of the turn. It is calculated according to the following rules:
+
+Attacks with a higher priority level strike first.
+If two or more attacks have the same priority level , ties are broken using each Pokémon in battle’s Speed . The game does this by comparing the Speeds of two Pokémon at a time:
+If one Pokémon is holding Quick Claw and it activates for this turn (20% chance)*, or it is holding Custap Berry with the appropriate amount of HP remaining, it strikes before the other Pokémon. If this condition holds for both Pokémon, the one with the higher Speed strikes first; ties in Speed are broken at random.
+Otherwise, if one Pokémon is holding Full Incense or Lagging Tail, it strikes after the other Pokémon. If both Pokémon hold Full Incense, Lagging Tail, or both, the one with the lower Speed strikes first; ties in Speed are broken at random.
+Otherwise, if one Pokémon has Stall, it strikes after the other Pokémon. If both Pokémon have Stall, the one with the lower Speed strikes first; ties in Speed are broken at random.
+Otherwise, if Trick Room is in effect, the Pokémon with the lower Speed strikes first; ties in Speed are broken at random.
+Otherwise, the Pokémon with the higher Speed strikes first; ties in Speed are broken at random.
+* If a Pokémon is holding Quick Claw at the beginning of the turn, that item will "activate" at a 20% chance. If it activates, its effect applies when turn order is determined both when commands are chosen and at the end of the turn, as long as the Pokémon is holding Quick Claw.
+
+In Pokémon Battle Revolution, the above steps might not be accurate in some cases. For example, Trick Room’s effect takes precedence over Custap Berry’s and Quick Claw’s effect.
+
+Priority Levels
+All attacks are categorized in eleven priority levels.
+
+5: Helping Hand
+4: Magic Coat, Snatch
+3: Protect, Detect, Endure, Follow Me
+2: Feint
+1: Quick Attack, Bide, Mach Punch, ExtremeSpeed, Fake Out, Sucker Punch, Vacuum Wave, Bullet Punch, Ice Shard, Shadow Sneak, Aqua Jet
+0: All other moves
+-1: Vital Throw
+-3: Focus Punch
+-4: Revenge, Avalanche
+-5: Counter, Mirror Coat
+-6: Whirlwind, Roar
+-7: Trick Room
+Modifications to Speed
+If the Pokémon has Simple, its Speed stat stage is doubled, then adjusted so it is neither less than -6 nor greater than 6.
+Speed stat stage is applied.
+During Rain Dance, the Pokémon’s Speed is doubled if it has Swift Swim.
+During Sunny Day, the Pokémon’s Speed is doubled if it has Chlorophyll.
+If the Pokémon is holding any one of the following, Speed is halved: Macho Brace, Iron Ball, Power Bracer, Power Belt, Power Lens, Power Band, Power Anklet, Power Weight. This applies even if Embargo is in effect for the Pokémon and even if it has Klutz.
+If the Pokémon is holding Choice Scarf, Speed is multiplied by 15/10.
+If the Pokémon’s current species is Ditto and is holding Quick Powder, its Speed is doubled.
+If the Pokémon has Quick Feet and is poisoned, burned, paralyzed, frozen, or asleep, Speed is multiplied by 15/10. Otherwise, if the Pokémon is paralyzed, its Speed is multiplied by 1/4.
+If the Pokémon has Slow Start and that ability is currently in effect, Speed is halved.
+If the Pokémon has Unburden, its Speed is doubled if it actually isn’t holding an item and if an item the Pokémon held was consumed or lost while the Pokémon had this ability and since the Pokémon entered the battle.
+If Tailwind is in effect for the Pokémon’s side, Speed is doubled.
+Turn Order Rules
+A Pokémon is considered to strike before other Pokémon when:
+
+It takes its attack segment during a turn.
+It uses Pursuit as a Pokémon is about to switch.
+It declares its intention to switch out normally or it changes to another Pokémon with Baton Pass, Healing Wish, Lunar Dance, or U-turn. (In either case, the Pokémon that replaces it will also be considered to strike before other Pokémon.)
+An item is used on it as commands are chosen in the turn.
+
+
+
+        OBEDIENCE CHECK
+
+        In battles in which Exp. Points can be gained, if the Pokémon tries to attack, the Pokémon’s 32-bit ID number, OT (Original Trainer) name, or both are different from those of the player, and its level is greater than the player’s "badge level", then this process is followed to determine whether the attack can be used.
+
+        The badge level is determined based on the number of Badges the player has:
+        No badges: Badge level=10
+        Two or more badges: Badge level=30
+        Four or more badges: Badge level=50
+        Six or more badges: Badge level=70
+        Eight or more badges: No obedience check is done
+        A random integer from 0 through 255 is generated, and A is set to ((Level of Pokémon)+(Badge level))*(Random integer)/256.
+        If A is at least the badge level, the Pokémon is disobedient. Otherwise, this process stops and the attack is used as usual.
+        If the Pokémon chose Rage for use, the effect of Rage is canceled.
+        If the attack is Snore or Sleep Talk while the Pokémon is asleep, display "X ignored orders while asleep!" and the attack is canceled.
+        Another random integer from 0 through 255 is generated, and B is set to ((Level of Pokémon)+(Badge level))*(Random integer)/256.
+        If B is less than the badge level, display the message "X ignored orders!" and the Pokémon uses a different move that can be chosen for use if possible. [If a different move is used this way, PP is spent for that different move instead of the move ordered, and the ordered move is still the last move chosen for use, but the different move can be the last move used as usual.]
+        If B is at least the badge level, C is set to (Level of Pokémon)-(badge level), and R is set to a random integer from 0 through 255.
+        If R is less than C and the Pokémon doesn’t have Vital Spirit or Insomnia and Uproar is not in effect for a Pokémon in battle, display "X began to nap!" and the Pokémon falls asleep. (Not prevented by Safeguard, Substitute, Leaf Guard, or other effects that prevent the Pokémon from sleeping.)
+        Otherwise, if R minus C is less than C, display "X won’t obey!" and the Pokémon deals confusion damage to itself.
+        Otherwise, display one of the following messages: "X won’t obey!", "X turned away!", "X is loafing around!", "X pretended to not notice!".
+        No obedience check is done if the Pokémon is continuing to use Bide.
+
+
+
+        TARGETING
+
+        The game now finds the attack’s target. This depends on the attack’s range.
+
+        The possible ranges are:
+
+        All exc. user: All Pokémon other than the user.
+        All opposing Pokémon
+        Ally: User’s partner. If user doesnâ€™t have a partner as commands are chosen, user doesnâ€™t choose a target.)
+        Both sides
+        No particular target
+        Opposing Pokémon’s side
+        Random opposing Pokémon: A single opposing Pokémon, selected at random.
+        Single exc. user: A single Pokémon other than the user, selected at random.
+        Single opposing Pokémon
+        User
+        User or ally: Either the user or its partner (if any).
+        User’s side
+        If an effect causes a Pokémon to use a move "with no particular target", or no target was selected for the move, and the move has a range of "single Pokémon except user", "no particular target", "opposing Pokémon selected at random", or "single opposing Pokémon", the target is chosen randomly among the opposing Pokémon. For all other target types, the move targets all Pokémon that fit the targeting criteria. Note that attacks with a range of "no particular target", "opposing Pokémon’s side", "user’s side", and "both sides" don’t target a particular Pokémon.
+
+        If an attack has more than one target, the effect is applied to each target separately, in the order in which they take their attack segments in that turn.
+
+        If an attack’s move has a single target and there is no Pokémon at a potential target’s position, the attack targets one of the opposing Pokémon instead, at random.
+
+        If an attack has no target, the attack does nothing.
+
+        Three effects affect targets: Follow Me, Lightningrod/Storm Drain, and Magic Coat. They are applied in this order:
+
+        Follow Me takes effect. If the attack is redirected to another target, the remaining effects below are ignored. (See attack description for Follow Me for details.)
+        If Magic Coat is in effect for the target when certain moves are used, that target uses that attack instead, and the remaining effects below for the previous attack are ignored. (See attack description for Magic Coat for details. If this effect happens, effects that trigger whenever that target is targeted by an attack don’t happen.)
+        If a Pokémon other than the target has Lightningrod or Storm Drain, the attack is redirected to that target. (See those abilities' descriptions for details.)
+        The Pressure ability takes into account the target determined after Follow Me is applied.
+
+        If an attack has multiple targets, the effects for the first target in turn order resolve, then the effects for the second target in turn order, and so on.
+
+
+
+DOUBLE BATTLE
+
+A Double Battle is a battle with two Pokémon in battle on each side. When a Double Battle starts, the first Pokémon on each side takes the left position, and the second Pokémon on each side takes the right position. If there are two Trainers on a single side, instead the first Pokémon on the left Trainer’s party takes the left position of that side, and the first Pokémon on the right Trainer’s party takes the right position of that side.
+
+In Double Battles with wild Pokémon, Roar, Teleport, and Whirlwind will always fail. However, the player can still end such battles using a Pok Doll, Fluffy Tail, or the Run command. If the player has a partner Trainer when a Double Battle with wild Pokémon starts, each Pokémon in the player’s party and the partner Trainer’s party will have full HP and PP and stop being poisoned, burned, paralyzed, frozen, and asleep when the battle ends.

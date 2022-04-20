@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas-pokemon-back-female
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: ca2f0c16c4a76234aacdec2d7b51b21c, type: 3}
+    totalSpriteSurfaceArea: 811008
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 5bd6be10302863d4da3885de76f00607, type: 3}
+  - {fileID: 21300000, guid: 94cc2c60dc4971b498babcd7b4be9ff4, type: 3}
+  - {fileID: 21300000, guid: 2836f670ff5944044bf49a1b333f5d05, type: 3}
+  - {fileID: 21300000, guid: fa1ff2f0c8b68ed4d921edec431ba139, type: 3}
+  - {fileID: 21300000, guid: 9ebf2141c797929429a6029e38d1c9e1, type: 3}
+  - {fileID: 21300000, guid: fad8c7d1943e0484ba10475d6728369f, type: 3}
+  - {fileID: 21300000, guid: 71f1b5f166adf824ba2f1702b0d6c1e3, type: 3}
+  - {fileID: 21300000, guid: 5d52a1528d2bcbe4c8919cdf2adbe680, type: 3}
+  - {fileID: 21300000, guid: 1736995200be6a5419ecb0a8de7cf386, type: 3}
+  - {fileID: 21300000, guid: ef52c4f2c743304459f6c82412b5c8af, type: 3}
+  - {fileID: 21300000, guid: e160e6f273af40a4fbf3df5dcb3a3ae9, type: 3}
+  - {fileID: 21300000, guid: a1b79bf2afc9f9146802378d931928c3, type: 3}
+  - {fileID: 21300000, guid: 42f75163a819aa94cb7171582dbd7a88, type: 3}
+  - {fileID: 21300000, guid: 67df3ca394dc19c41b0de23f876b53cf, type: 3}
+  - {fileID: 21300000, guid: 18f45fa37306367419d7407af746d859, type: 3}
+  - {fileID: 21300000, guid: 5860b8b3dafcbb546ae6d14529911862, type: 3}
+  - {fileID: 21300000, guid: 2a52acc3a8800804fb24d44d0457edeb, type: 3}
+  - {fileID: 21300000, guid: cd7c6ee3d55f64b4ebaabc03e227d8d2, type: 3}
+  - {fileID: 21300000, guid: aef64a44b61836c4f81d659a9298c39e, type: 3}
+  - {fileID: 21300000, guid: 1307b454fb613284fa9fcdf9c8cd7d76, type: 3}
+  - {fileID: 21300000, guid: a6cb9c5413f4c0347a69f4fd66e8c89c, type: 3}
+  - {fileID: 21300000, guid: 8dfe77f458bf65c45b70c1957e0a0824, type: 3}
+  - {fileID: 21300000, guid: b7c6b40516dee7d4989061569803d2e1, type: 3}
+  - {fileID: 21300000, guid: 4ce0cb056848eb848a439fba861c89fb, type: 3}
+  - {fileID: 21300000, guid: 6c393c1569cd61b42927b1cfd906e38c, type: 3}
+  - {fileID: 21300000, guid: bca8202534deb0c44a311676df3ab155, type: 3}
+  - {fileID: 21300000, guid: 2c3881551d5c4a24fb4b9d1f6b0286fc, type: 3}
+  - {fileID: 21300000, guid: 41496f859cad4f044aae4a23de1b17e0, type: 3}
+  - {fileID: 21300000, guid: fede65a562503c04b9e7f289a34b9491, type: 3}
+  - {fileID: 21300000, guid: f570c2e56cdd8ed47ba75b0f3c33ae5c, type: 3}
+  - {fileID: 21300000, guid: d2c021065782bb042982a9eaf60902c4, type: 3}
+  - {fileID: 21300000, guid: 71147706cd0fc384fa94f47d02f14090, type: 3}
+  - {fileID: 21300000, guid: 442a6d06042cebe408c2716099ab5bdb, type: 3}
+  - {fileID: 21300000, guid: 947f599683e773b44ba2d0377b6efd9c, type: 3}
+  - {fileID: 21300000, guid: 948a9ab696448e948a50dcfbec5dcedb, type: 3}
+  - {fileID: 21300000, guid: 1613d2c6e44bb3844bed8dfa3d219c30, type: 3}
+  - {fileID: 21300000, guid: 00b040d69c59a664085b8c8cf990d20e, type: 3}
+  - {fileID: 21300000, guid: d23e40d65aed40840b167d279c268bed, type: 3}
+  - {fileID: 21300000, guid: cf60e0d6e26975d4d8d3ec9ba967e3f5, type: 3}
+  - {fileID: 21300000, guid: 94668f271b8d46141978ec9c4a8e4ac1, type: 3}
+  - {fileID: 21300000, guid: ccd1a1c78adac2749a5b8f2f4fc1d14a, type: 3}
+  - {fileID: 21300000, guid: 6b2cb7c7a98e872428cbb1e4269c94bd, type: 3}
+  - {fileID: 21300000, guid: ffe0b1f7fc1589d4f99ae812bc6ecd90, type: 3}
+  - {fileID: 21300000, guid: 9c73d808b7df48347b3f2497c6d8ae8d, type: 3}
+  - {fileID: 21300000, guid: d2370d188f7d8b84f9c8ce9a1e1b027b, type: 3}
+  - {fileID: 21300000, guid: e40b4548593e14342b9f3c7c7cc3a0d3, type: 3}
+  - {fileID: 21300000, guid: 52fe35a8abd33e241bef20e777c8562e, type: 3}
+  - {fileID: 21300000, guid: 29fd7ae8097e80f4b854d90daf9853ce, type: 3}
+  - {fileID: 21300000, guid: 70993e193607fd4479ffa3db1a8d16ac, type: 3}
+  - {fileID: 21300000, guid: 2b6b07499a8fb854d951014453a327e4, type: 3}
+  - {fileID: 21300000, guid: b05d116915c349e4d93f84ebdd94f26f, type: 3}
+  - {fileID: 21300000, guid: caffd769ccebbf14b9eab7802a724b8b, type: 3}
+  - {fileID: 21300000, guid: 56997179c3b95d443836782a528ede14, type: 3}
+  - {fileID: 21300000, guid: 7b6f8b794f6f60846b03523899aa7b28, type: 3}
+  - {fileID: 21300000, guid: 09172c791303b704694a355101153797, type: 3}
+  - {fileID: 21300000, guid: d357e399401c3bf499ba1c1c221a6f2c, type: 3}
+  - {fileID: 21300000, guid: 013697b99e1e57143a090fb275ad989c, type: 3}
+  - {fileID: 21300000, guid: f658e8c9fc437db4ab9c18779eea30e1, type: 3}
+  - {fileID: 21300000, guid: ccfbbee90cca7174caef814a31850d5a, type: 3}
+  - {fileID: 21300000, guid: 1c6e0d4ad2a2b4d488f6b711ef4898fc, type: 3}
+  - {fileID: 21300000, guid: 6a41845a9c0996141bf989969978f4d7, type: 3}
+  - {fileID: 21300000, guid: a766527a094eb5b4296951e701f45916, type: 3}
+  - {fileID: 21300000, guid: afea74aab5c173b478bf3dde280c88d1, type: 3}
+  - {fileID: 21300000, guid: 4438275bbe2601a49a59d8d12595c6ee, type: 3}
+  - {fileID: 21300000, guid: 70414c5b8292ec34994974037c5e0d72, type: 3}
+  - {fileID: 21300000, guid: 6fa7467b800adee4397c5f5df99c3828, type: 3}
+  - {fileID: 21300000, guid: 37c397bbef8a48f4892d00dee1166730, type: 3}
+  - {fileID: 21300000, guid: f5393f5cf2cf13141ba65025a8576c02, type: 3}
+  - {fileID: 21300000, guid: b98f8d7c357968a4fafd6c8fed5bc706, type: 3}
+  - {fileID: 21300000, guid: 6eb7e58c4a171184a851f2d6b5e2086d, type: 3}
+  - {fileID: 21300000, guid: 4634d7cc34469c940b4f492faf02f0b0, type: 3}
+  - {fileID: 21300000, guid: 86a3a0ec42aa406478efbf3bff2d6227, type: 3}
+  - {fileID: 21300000, guid: 8554da0d906f3b14f9a5f3a6d9044ced, type: 3}
+  - {fileID: 21300000, guid: 25cf636dc6cf251478bf492dca5071e1, type: 3}
+  - {fileID: 21300000, guid: 9354578d566172041b364ea8fbe8a9c1, type: 3}
+  - {fileID: 21300000, guid: c794c9bd813536e4c9d1a5f146d2fc9a, type: 3}
+  - {fileID: 21300000, guid: d1b6e3ddc0dc1b24a8f720ac0e815e40, type: 3}
+  - {fileID: 21300000, guid: e5c4721ec922ecd489b7990068baebea, type: 3}
+  - {fileID: 21300000, guid: a523e21e30dfbe24c9a288938f8e48cc, type: 3}
+  - {fileID: 21300000, guid: cc71db2e877d9f440bb58086a98fe858, type: 3}
+  - {fileID: 21300000, guid: 4393116ea19de2a4da1aadfa206b64c2, type: 3}
+  - {fileID: 21300000, guid: 28a8636e453b682408db9406986d32e5, type: 3}
+  - {fileID: 21300000, guid: bdfd140f941f5f342bd18b2a65d012a3, type: 3}
+  - {fileID: 21300000, guid: 4420b61fa1f1c0f4e938e0535bbe6fe4, type: 3}
+  - {fileID: 21300000, guid: 228a9e1fcc66d1d4fb21c72166940986, type: 3}
+  - {fileID: 21300000, guid: 1aaa837f319d68145bf49b604ef4cd8e, type: 3}
+  - {fileID: 21300000, guid: 64ee858f03f35bb41b2e05d4c31c429d, type: 3}
+  - {fileID: 21300000, guid: ee3e4adfc7e8f8d449510981db84fd8d, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 307
+  - 308
+  - 418
+  - 255
+  - 450
+  - 45
+  - 459
+  - 12
+  - 19
+  - 315
+  - 405
+  - 130
+  - 123
+  - 403
+  - 453
+  - 424
+  - 154
+  - 85
+  - 214
+  - 444
+  - 208
+  - 195
+  - 178
+  - 275
+  - 207
+  - 257
+  - 256
+  - 112
+  - 118
+  - 186
+  - 443
+  - 454
+  - 203
+  - 593
+  - 190
+  - 592
+  - 274
+  - 198
+  - 445
+  - 84
+  - 111
+  - 229
+  - 396
+  - 3
+  - 194
+  - 323
+  - 20
+  - 65
+  - 272
+  - 322
+  - 64
+  - 269
+  - 165
+  - 25
+  - 129
+  - 224
+  - 217
+  - 41
+  - 419
+  - 407
+  - 457
+  - 97
+  - 44
+  - 464
+  - 212
+  - 456
+  - 317
+  - 521
+  - 26
+  - 461
+  - 465
+  - 449
+  - 399
+  - 267
+  - 215
+  - 316
+  - 185
+  - 404
+  - 369
+  - 119
+  - 401
+  - 232
+  - 350
+  - 402
+  - 221
+  - 166
+  - 473
+  - 397
+  m_RenderDataMap: {}
+  m_Tag: atlas-pokemon-back-female
+  m_IsVariant: 0

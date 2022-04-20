@@ -1,0 +1,232 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468602
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: atlas-pokemon-back-female-shiny
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 0
+      filterMode: 0
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 0
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 2
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 0
+      enableTightPacking: 1
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 102900000, guid: fd0367ad4939cc444a0e72862ee2fe43, type: 3}
+    totalSpriteSurfaceArea: 811008
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 1413f010ff573e9469279524e990ace5, type: 3}
+  - {fileID: 21300000, guid: 5bad0a20af1e3594fa1ed1e18f5f6974, type: 3}
+  - {fileID: 21300000, guid: 352c5930105fe614abedb8ea360344a9, type: 3}
+  - {fileID: 21300000, guid: 8c0ba140cdb8c3b40ace755aeeb92d45, type: 3}
+  - {fileID: 21300000, guid: d5585f80806f8de4a9b49cb8c9cb62f0, type: 3}
+  - {fileID: 21300000, guid: 2321a5d0b44d347478046909573078f9, type: 3}
+  - {fileID: 21300000, guid: 97d9f1e0c865d704c848bf07a203914f, type: 3}
+  - {fileID: 21300000, guid: ccad36214c1318c4c82ff8423caeb4f1, type: 3}
+  - {fileID: 21300000, guid: e60b8f21c44892f4585f33c3193ca01b, type: 3}
+  - {fileID: 21300000, guid: beec1c91784299643945e30de2549768, type: 3}
+  - {fileID: 21300000, guid: 2bb26ac10c438ae48ba1b0067d0ee28c, type: 3}
+  - {fileID: 21300000, guid: 636c45e1983220048b1676b7b59ec617, type: 3}
+  - {fileID: 21300000, guid: a2c49102875cfa74b976e42a910e01dd, type: 3}
+  - {fileID: 21300000, guid: 6be8c20250d1f314382f0cca1bf0203e, type: 3}
+  - {fileID: 21300000, guid: 87b54e02b4f4ee649bd48efa36feb0a0, type: 3}
+  - {fileID: 21300000, guid: 8f579442f9f793b4e9c1a62c1cd52879, type: 3}
+  - {fileID: 21300000, guid: e0c5078244cd394488ec4605eeb9c502, type: 3}
+  - {fileID: 21300000, guid: af3a2bd27723ad8418c5e21ce3e894c6, type: 3}
+  - {fileID: 21300000, guid: aeda7023c8fd97d43abbf36e57e1aea0, type: 3}
+  - {fileID: 21300000, guid: ed476753184ba8142ac4c354cda2c7f1, type: 3}
+  - {fileID: 21300000, guid: e616d573e363ae34fbab73883b572fa2, type: 3}
+  - {fileID: 21300000, guid: cbd584c352e0ac241b6713190c66be89, type: 3}
+  - {fileID: 21300000, guid: 2fb0d9c37b069354a953dfe627511b04, type: 3}
+  - {fileID: 21300000, guid: 8b3985d3a0b09414fa7ec0631f84b9a6, type: 3}
+  - {fileID: 21300000, guid: 8d91c4e374a908a419046a722cf28763, type: 3}
+  - {fileID: 21300000, guid: cc58a024bcedc8e498eed786b8e1279c, type: 3}
+  - {fileID: 21300000, guid: 99cf8d24131e6934bbca2684dd1e253e, type: 3}
+  - {fileID: 21300000, guid: 15cb893493becfd44992c4158e3a355d, type: 3}
+  - {fileID: 21300000, guid: 8f087e9412876ab499da3354cdfce264, type: 3}
+  - {fileID: 21300000, guid: 1d302ba41f5fb354f808a56d5c13ef58, type: 3}
+  - {fileID: 21300000, guid: 3433310590778e243a12c8a07e54cadf, type: 3}
+  - {fileID: 21300000, guid: b3649305bcac54e4a967a45cf0917a92, type: 3}
+  - {fileID: 21300000, guid: 608ac015d84a26243bd9b474ff2bdae0, type: 3}
+  - {fileID: 21300000, guid: a43a7625730771b46beea41a0a9f990b, type: 3}
+  - {fileID: 21300000, guid: 049ca5756bf74ef408796e139cad8aa7, type: 3}
+  - {fileID: 21300000, guid: 247ee4b5ead4bef41a6fa06917431b48, type: 3}
+  - {fileID: 21300000, guid: 5f1958e5e5899be4bb6f2b5729d0b914, type: 3}
+  - {fileID: 21300000, guid: 712ce306ab9740f45b8ad32272edf241, type: 3}
+  - {fileID: 21300000, guid: 1424b426cdf846a4e9f7cf5f9a782b2a, type: 3}
+  - {fileID: 21300000, guid: b532b196c12461e44b764eeb09c97a6f, type: 3}
+  - {fileID: 21300000, guid: ab4dd3a6dd4100a468e549662bd287fb, type: 3}
+  - {fileID: 21300000, guid: 41f196a6287301643b16c0e8db55a770, type: 3}
+  - {fileID: 21300000, guid: 14d12cc6866ecc74488fc68a6506b5a0, type: 3}
+  - {fileID: 21300000, guid: b35294376d68f3741ae80f3376be1adc, type: 3}
+  - {fileID: 21300000, guid: bb4eb537e0c81b84fa1128e7097320e6, type: 3}
+  - {fileID: 21300000, guid: df492d374338cd54b8c066e9fb39058a, type: 3}
+  - {fileID: 21300000, guid: b64cd51866140c44a9a71bc1e1d9449c, type: 3}
+  - {fileID: 21300000, guid: 82127c38736e0014b97e0f94cf1ddc40, type: 3}
+  - {fileID: 21300000, guid: e955278885d89004ba945f921d75e9e1, type: 3}
+  - {fileID: 21300000, guid: aa1097b8791848848b3df5d15fd0e59d, type: 3}
+  - {fileID: 21300000, guid: 8d84d2d80a236444cb7a1437940497e2, type: 3}
+  - {fileID: 21300000, guid: a0e61ed8619d3e34d9e6908bc0933815, type: 3}
+  - {fileID: 21300000, guid: 642f4b2909159284992d1b07d9792834, type: 3}
+  - {fileID: 21300000, guid: 691c3dc9e00059d469a979e9ba8aef0e, type: 3}
+  - {fileID: 21300000, guid: 730508e9c19f5cb479ed1a72e0e34955, type: 3}
+  - {fileID: 21300000, guid: 12216fe90c61838468bb3a084def331b, type: 3}
+  - {fileID: 21300000, guid: a3bb80f9222ee2048a3bc4be19dbb74a, type: 3}
+  - {fileID: 21300000, guid: 8cdce00a5f0cfcb4595d3dbfa8d63d96, type: 3}
+  - {fileID: 21300000, guid: 99d7c24acd7d57440afeb8b061365e75, type: 3}
+  - {fileID: 21300000, guid: f048cd6a259082a4f98daef859f92363, type: 3}
+  - {fileID: 21300000, guid: fe481a7a837d22f46bb756811ed1872b, type: 3}
+  - {fileID: 21300000, guid: 4298e4aaf453aef40b5db358183b6474, type: 3}
+  - {fileID: 21300000, guid: 1f3149fa1f21a75408cfb082a222182b, type: 3}
+  - {fileID: 21300000, guid: eb5de11b3523b93479534cb5b048c7f9, type: 3}
+  - {fileID: 21300000, guid: 17a78a1b63687574db04029acd90ddf9, type: 3}
+  - {fileID: 21300000, guid: 8e0ef93b43107d249a50e07af77796e1, type: 3}
+  - {fileID: 21300000, guid: 2f1cf36b077b2894dab8f1d5d4e1b74b, type: 3}
+  - {fileID: 21300000, guid: fc9acb9bccfa2084cb2d2283524fd86b, type: 3}
+  - {fileID: 21300000, guid: 7802ebdb3e3ab4a49a533c52545e7cc8, type: 3}
+  - {fileID: 21300000, guid: 3e51933ca6faa9c47bf793cbf7a4bfd1, type: 3}
+  - {fileID: 21300000, guid: b9d9464c35bba624b906c03a9e111d49, type: 3}
+  - {fileID: 21300000, guid: d586e87c85bf08e4a99c46b061efe72a, type: 3}
+  - {fileID: 21300000, guid: 85ae105d07f676a46b9bdb10c008dd17, type: 3}
+  - {fileID: 21300000, guid: e7e50d6ddfce286448634328e873eae8, type: 3}
+  - {fileID: 21300000, guid: 4195f68dbb0a4de46a3d11ff33cf8ca7, type: 3}
+  - {fileID: 21300000, guid: efab70ad4aa13b2479371878e0859397, type: 3}
+  - {fileID: 21300000, guid: 5763f8bdca6ba4d4cb046601c6deedea, type: 3}
+  - {fileID: 21300000, guid: 8550e9ed1e6d931448735e8010f715f1, type: 3}
+  - {fileID: 21300000, guid: e65619fd753cfa44abcd24d5948d26d2, type: 3}
+  - {fileID: 21300000, guid: c72f695eeeab49540a5391b4a4253846, type: 3}
+  - {fileID: 21300000, guid: 03769b8e309fdf24c84684ea97de8f8d, type: 3}
+  - {fileID: 21300000, guid: c36f65ce5f915674e8e89baedd395137, type: 3}
+  - {fileID: 21300000, guid: 6a1c5b0ffaba1f74b82de8974a1edc44, type: 3}
+  - {fileID: 21300000, guid: 8641002f1a45ca5469382f98798a7796, type: 3}
+  - {fileID: 21300000, guid: e043d07f9ac187f48bdc706f817a2dbb, type: 3}
+  - {fileID: 21300000, guid: ac01b17fde83a78489a8d6bb672435c6, type: 3}
+  - {fileID: 21300000, guid: 62a6498f8fbbe8a419f860ba56fccf70, type: 3}
+  - {fileID: 21300000, guid: 89e16fbf26e19b0499c72b0326432a29, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - 84
+  - 112
+  - 20
+  - 41
+  - 3
+  - 257
+  - 317
+  - 130
+  - 473
+  - 405
+  - 19
+  - 407
+  - 419
+  - 195
+  - 267
+  - 185
+  - 369
+  - 221
+  - 178
+  - 396
+  - 44
+  - 256
+  - 454
+  - 445
+  - 129
+  - 111
+  - 315
+  - 399
+  - 593
+  - 119
+  - 232
+  - 229
+  - 154
+  - 322
+  - 449
+  - 166
+  - 402
+  - 85
+  - 443
+  - 123
+  - 461
+  - 97
+  - 65
+  - 217
+  - 457
+  - 450
+  - 401
+  - 45
+  - 186
+  - 255
+  - 323
+  - 215
+  - 275
+  - 424
+  - 118
+  - 403
+  - 592
+  - 274
+  - 464
+  - 316
+  - 165
+  - 404
+  - 465
+  - 190
+  - 208
+  - 459
+  - 272
+  - 203
+  - 64
+  - 224
+  - 207
+  - 212
+  - 418
+  - 194
+  - 214
+  - 397
+  - 12
+  - 198
+  - 444
+  - 269
+  - 521
+  - 456
+  - 350
+  - 453
+  - 25
+  - 308
+  - 26
+  - 307
+  m_RenderDataMap: {}
+  m_Tag: atlas-pokemon-back-female-shiny
+  m_IsVariant: 0

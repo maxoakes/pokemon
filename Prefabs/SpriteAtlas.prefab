@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1339687391149949764
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402626075450183294}
+  - component: {fileID: 6729817897758928755}
+  m_Layer: 0
+  m_Name: SpriteAtlas
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1402626075450183294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339687391149949764}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6729817897758928755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339687391149949764}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f02e5515ce8a5e44ebf5a0afe4278a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  back: {fileID: 4343727234628468602, guid: a195f5376b3b16740851f8edd5175e14, type: 2}
+  backFemale: {fileID: 4343727234628468602, guid: 1b417c258cbeec0459e3811548db0ab9, type: 2}
+  backShinyFemale: {fileID: 4343727234628468602, guid: 278d9f1314d037745bc9a7cfe7e3ab66, type: 2}
+  backShiny: {fileID: 4343727234628468602, guid: 123fd1f6a6785e344b0372452c587940, type: 2}
+  front: {fileID: 4343727234628468602, guid: fe757afd512174c4698d1412c6495070, type: 2}
+  frontShiny: {fileID: 4343727234628468602, guid: bc3d7c8bc0b159744a100a18e8d31256, type: 2}
+  frontShinyFemale: {fileID: 4343727234628468602, guid: f679d847153a22044b468ce8c177879d, type: 2}
+  frontFemale: {fileID: 4343727234628468602, guid: ca80cb9f4857f8840ba0a163564d4976, type: 2}
+  footprints: {fileID: 4343727234628468602, guid: 13d5230183801134a814d59fe081ee37, type: 2}
+  item: {fileID: 4343727234628468602, guid: f77e8324444c9814ba56730a467f2e99, type: 2}
+  icon: {fileID: 4343727234628468602, guid: 173e6c70710c4fd4182ac887e6ebc999, type: 2}
+  iconFemale: {fileID: 4343727234628468602, guid: beaf5acd2a5ee8e4bb2b6b2696dcfac8, type: 2}
