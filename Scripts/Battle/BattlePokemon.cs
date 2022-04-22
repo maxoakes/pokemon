@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BattlePokemon : MonoBehaviour
 {
+    public Trainer ownerTrainer;
     public Team team;
     public int partyIndex;
     private Battle3DHUD hud;
@@ -25,6 +26,7 @@ public class BattlePokemon : MonoBehaviour
     public int attemptsToRun;
     public int remainingSleepTurns;
     public bool newToField;
+    public Move lastMoveUsedAgainstThis;
 
     //initialization
     void Awake()
@@ -36,6 +38,7 @@ public class BattlePokemon : MonoBehaviour
 
     public void SetPokemon(PartyPokemon pokemon, Team team, int partyIndex, int fieldIndex=0)
     {
+        this.ownerTrainer = pokemon.GetOriginalTrainer(); //TODO: change this for trading pokemon
         this.team = team;
         this.fieldIndex = fieldIndex;
         this.partyIndex = partyIndex;

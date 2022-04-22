@@ -327,32 +327,28 @@ public static class BattleCalculator
         return (int)Mathf.Ceil(healAmount);
     }
 
-    public static void ApplyEVs(BattlePokemon winner, BattlePokemon fainted)
+    public static void ApplyEVs(PartyPokemon winner, PartyPokemon fainted)
     {
-        PartyPokemon defeatedPokemon = fainted.basePartyPokemon;
-        PartyPokemon winningPokemon = winner.basePartyPokemon;
 
-        if (winningPokemon.GetCurrentHP() <= 0) return;
-        winningPokemon.AddEVTuple(defeatedPokemon.basePokemon.GetBaseStats().GetEffortValueTuple());
+        if (winner.GetCurrentHP() <= 0) return;
+        winner.AddEVTuple(fainted.basePokemon.GetBaseStats().GetEffortValueTuple());
     }
-    public static int CalculateExpGain(BattlePokemon winner, BattlePokemon fainted)
+    public static int CalculateExpGain(PartyPokemon winner, PartyPokemon fainted)
     {
-        PartyPokemon defeatedPokemon = fainted.basePartyPokemon;
-        PartyPokemon winningPokemon = winner.basePartyPokemon;
         int numAssisted = 1;
 
-        if (winningPokemon.GetCurrentHP() <= 0) return 0;
+        if (winner.GetCurrentHP() <= 0) return 0;
 
-        float a = (defeatedPokemon.GetOriginalTrainer() is null) ? 1f : 1.5f; //is wild or is trainer
-        int b = defeatedPokemon.basePokemon.baseExperience; //opponent base experience
+        float a = (fainted.GetOriginalTrainer() is null) ? 1f : 1.5f; //is wild or is trainer
+        int b = fainted.basePokemon.baseExperience; //opponent base experience
         float e = 1f;
-        if (winningPokemon.GetHeldItem() != null)
+        if (winner.GetHeldItem() != null)
         {
-            if (winningPokemon.GetHeldItem().identifier.Equals("lucky-egg")) e = 1.5f; //if the winner has lucky egg
+            if (winner.GetHeldItem().identifier.Equals("lucky-egg")) e = 1.5f; //if the winner has lucky egg
         }
         float f = 1; //affection
-        int L = defeatedPokemon.GetLevel(); //oppenent level
-        int Lp = winningPokemon.GetLevel(); //winner's level
+        int L = fainted.GetLevel(); //oppenent level
+        int Lp = winner.GetLevel(); //winner's level
         float p = 1; //exp point power
         int s = numAssisted; //assists and experience share users
         float t = 1; //traded pokemon

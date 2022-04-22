@@ -3,66 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class BattleSimPicker : MonoBehaviour
 {
-    public Registry registry;
-    public Dropdown genSelector;
+    //screen elements
+    public TMP_Dropdown genSelector;
     public Button genConfirm;
-    public GameObject pokemonSelectorBox;
+    public TMP_InputField pokemonName;
+    public TMP_InputField pokemonLevel;
     public List<GameObject> pokemonItems;
+
     public List<PartyPokemon> party;
 
     void Start()
     {
         GameManager.Instance.gameMode = Mode.BattleSimPicker;
-        pokemonSelectorBox.SetActive(false);
         party = new List<PartyPokemon>();
         GameManager.Instance.player = new Trainer("Blue", "Cool Trainer", Gender.Male, Team.Ally);
+        GameManager.Instance.SetGeneration(Generation.Gen5);
     }
-    public void OnGenConfirm()
-    {
-        Generation chosenGeneration = Generation.Gen5;
-        int dropdownSelection = genSelector.value;
-        switch (dropdownSelection)
-        {
-            case 0:
-                chosenGeneration = Generation.Gen3;
-                break;
-            case 1:
-                chosenGeneration = Generation.Gen4;
-                break;
-            case 2:
-                chosenGeneration = Generation.Gen5;
-                chosenGeneration = Generation.Gen6; //TODO: remove when sprites for gen 6 exist
-                break;
-            case 3:
-                chosenGeneration = Generation.Gen6;
-                break;
-        }
-        Debug.Log($"Chosen: {dropdownSelection} with enum {chosenGeneration}");
-        GameManager.Instance.SetGeneration(chosenGeneration);
-        pokemonSelectorBox.SetActive(true);
-        try
-        {
-            party.RemoveRange(0,6);
-        }
-        catch (Exception)
-        {
-            Debug.Log("No party already created");
-        }
-        UpdateDisplayedList();
-
-    }
+    public void OnGenConfirm() { } //TODO: when all of the assets for all generations are obtained, then make this available
 
     public void OnPokemonConfirm()
     {
         if (party.Count == 6)
         {
-            Debug.Log("Party is full");
+            Debug.LogWarning("Party is full");
             return;
         }
-        string pokemonInput = pokemonSelectorBox.transform.Find("Name").GetComponentInChildren<Text>().text;
+        string pokemonInput = pokemonName.text;
         int id = 0;
         try
         {
@@ -70,9 +40,9 @@ public class BattleSimPicker : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.Log("not a number for pokemon");
+            Debug.LogError("not a number for pokemon");
         }
-        string levelInput = pokemonSelectorBox.transform.Find("Level").GetComponentInChildren<Text>().text;
+        string levelInput = pokemonLevel.text;
         int level = 1; 
         try
         {
@@ -80,31 +50,30 @@ public class BattleSimPicker : MonoBehaviour
         }
         catch (Exception)
         {
-            Debug.Log("level not valid");
+            Debug.LogError("level not valid");
             return;
         }
         
         try
         {
+            PartyPokemon pokemon;
             if (id == 0)
             {
                 Debug.Log($"Found {GameManager.Instance.registry.pokemonNames[pokemonInput]}");
-                PartyPokemon p = new PartyPokemon(GameManager.Instance.registry.pokemonNames[pokemonInput], null, level);
-                p.SetOriginalTrainer(GameManager.Instance.player);
-                party.Add(p);
+                pokemon = new PartyPokemon(GameManager.Instance.registry.pokemonNames[pokemonInput], null, level);
             }            
             else
             {   
                 Debug.Log($"Found {GameManager.Instance.registry.species[id].name}");
-                PartyPokemon p = new PartyPokemon(id, null, level);
-                p.SetOriginalTrainer(GameManager.Instance.player);
-                party.Add(p);
+                pokemon = new PartyPokemon(id, null, level);
             }
+            pokemon.SetOriginalTrainer(GameManager.Instance.player);
+            party.Add(pokemon);
             UpdateDisplayedList();
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            Debug.Log("Bad input");
+            Debug.LogError(e.StackTrace);
         }
     }
 
@@ -121,13 +90,12 @@ public class BattleSimPicker : MonoBehaviour
         {
             try
             {
-                //pokemonItems[i].SetActive(true);
-                pokemonItems[i].transform.Find("Description").GetComponent<Text>().text = party[i].FullString();
-                Debug.Log("Party " + i + ": " + party[i].FullString());
+                pokemonItems[i].transform.Find("Description").GetComponent<TextMeshProUGUI>().text = party[i].FullString();
+                Debug.Log($"Party {i}: {party[i].FullString()}");
             }
             catch (Exception)
             {
-                pokemonItems[i].transform.Find("Description").GetComponent<Text>().text = "";
+                pokemonItems[i].transform.Find("Description").GetComponent<TextMeshProUGUI>().text = "";
             }
         }
     }

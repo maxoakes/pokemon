@@ -18,6 +18,11 @@ public enum BattleState
     Selection,
     Action,
     PostAction,
+    End
+}
+
+public enum EndType
+{
     Win,
     Loss,
     Flee
@@ -71,6 +76,7 @@ public class BattleSystemV2 : MonoBehaviour
     public List<FieldEffects> currentFieldEffects;
     private static BattleAction allySelectedAction;
     private static BattleAction foeSelectedAction;
+    private List<PartyPokemon> foePokemonFaintedThisTurn;
     public bool UISwitchPerformed;
 
     void Start()
@@ -85,6 +91,7 @@ public class BattleSystemV2 : MonoBehaviour
         SetButtonVisable(false);
         SetButtonsClickable(false);
         currentFieldEffects = new List<FieldEffects>();
+        foePokemonFaintedThisTurn = new List<PartyPokemon>();
         StartCoroutine(SetupPhase());        
     }
 
@@ -118,22 +125,24 @@ public class BattleSystemV2 : MonoBehaviour
         yield return StartCoroutine(RecallTrainer(player));
         yield return StartCoroutine(SummonPokemon(player, 0));
 
-        while (state != BattleState.Win || state != BattleState.Loss)
+        while (state != BattleState.End)
         {
             turn++;
+            foePokemonFaintedThisTurn.Clear();
             Debug.Log($"*************************** Starting turn {turn}. ***************************");
             yield return StartCoroutine(PreTurnPhase());
             SelectionPhase();
             yield return StartCoroutine(AwaitSelections());
             yield return StartCoroutine(ActionPhase());
             yield return StartCoroutine(PostActionPhase());
+            yield return StartCoroutine(SwitchOutPhase());
             yield return null;
         }
     }
 
     IEnumerator PreTurnPhase()
     {
-        List<BattlePokemon> allPokemon = GetAllPokemon();
+        List<BattlePokemon> allPokemon = GetAllFieldPokemon();
         foreach (BattlePokemon pokemon in allPokemon)
         {
             if (pokemon.newToField)
@@ -210,9 +219,9 @@ public class BattleSystemV2 : MonoBehaviour
                 int selectedSlot = UnityEngine.Random.Range(0, selectableMoves.Count-1);
                 foeSelectedAction = new BattleAction(
                         action: ActionType.Fight,
-                        trainer: foe,
                         attackingPokemon: foePokemon,
-                        targetPokemon: allyPokemon,
+                        targetTeam: Team.Ally,
+                        targetIndex: 0,
                         move: moves[selectedSlot].Item3,
                         moveSlot: selectedSlot);
             }
@@ -220,9 +229,9 @@ public class BattleSystemV2 : MonoBehaviour
             {
                 foeSelectedAction = new BattleAction(
                     action: ActionType.Fight,
-                    trainer: foe,
                     attackingPokemon: foePokemon,
-                    targetPokemon: allyPokemon,
+                    targetTeam: Team.Ally,
+                    targetIndex: 0,
                     move: GameManager.Instance.registry.struggle,
                     moveSlot: 0);
             }
@@ -234,9 +243,9 @@ public class BattleSystemV2 : MonoBehaviour
         if (state != BattleState.Selection) return;
         allySelectedAction = new BattleAction(
             action: ActionType.Fight,
-            trainer: player,
             attackingPokemon: allyPokemon,
-            targetPokemon: foePokemon,
+            targetTeam: Team.Foe,
+            targetIndex: 0,
             move: allyPokemon.basePartyPokemon.GetMoves()[slot].m,
             moveSlot: slot);
         Debug.Log("Move Pressed " + allySelectedAction);
@@ -260,9 +269,9 @@ public class BattleSystemV2 : MonoBehaviour
         if (state != BattleState.Selection) return;
         allySelectedAction = new BattleAction(
             action: ActionType.Run,
-            trainer: player,
             attackingPokemon: allyPokemon,
-            targetPokemon: foePokemon);
+            targetTeam: Team.Foe,
+            targetIndex: 0);
         Debug.Log("Flee pressed");
         SetButtonsClickable(false);
         SetButtonVisable(false);
@@ -274,9 +283,9 @@ public class BattleSystemV2 : MonoBehaviour
         PartyMenu.Instance.currentSwapType = SwapType.BattleActionSwap;
         allySelectedAction = new BattleAction(
             action: ActionType.Party,
-            trainer: player,
             attackingPokemon: allyPokemon,
-            targetPokemon: allyPokemon,
+            targetTeam: Team.Ally,
+            targetIndex: 0,
             partyIndex: slot);
         Debug.Log("Party Switch selected " + allySelectedAction);
         SetButtonsClickable(false);
@@ -332,8 +341,10 @@ public class BattleSystemV2 : MonoBehaviour
         int actionsPerformedThisTurn = 0;
         foreach (BattleAction action in actionQueue)
         {
-            Debug.Log($"Performing action from {action.attackingPokemon.basePartyPokemon.GetName()} to {action.targetPokemon.basePartyPokemon.GetName()}");
-            if (!action.attackingPokemon.basePartyPokemon.UsableInBattle()) yield break;
+            GetPokemonAtSlot(action.targetTeam).lastMoveUsedAgainstThis = null;
+            if (!action.attackingPokemon.basePartyPokemon.UsableInBattle() || !GetPokemonAtSlot(action.targetTeam).basePartyPokemon.UsableInBattle()) continue;
+            Debug.Log($"Performing action from {action.attackingPokemon.basePartyPokemon.GetName()} to {GetPokemonAtSlot(action.targetTeam).basePartyPokemon.GetName()}");
+            //if (!action.attackingPokemon.basePartyPokemon.UsableInBattle()) yield break;
 
             if (action.action == ActionType.Run) yield return StartCoroutine(PerformAttemptToFlee(action));
             if (action.action == ActionType.Bag) yield return StartCoroutine(PerformActionBag(action));
@@ -341,8 +352,7 @@ public class BattleSystemV2 : MonoBehaviour
             else if (action.action == ActionType.Fight) yield return StartCoroutine(PerformActionMove(action, actionsPerformedThisTurn, 1-actionsPerformedThisTurn));
             actionsPerformedThisTurn++;
 
-            if (!allyPokemon.basePartyPokemon.UsableInBattle() || !foePokemon.basePartyPokemon.UsableInBattle()) break;
-            //if a pokemon is dead as a result of an attack, action phase ends and all sides missing a pokemon need to pick a new one.
+            
         }
         Debug.Log("Ending action phase");
     }
@@ -350,7 +360,7 @@ public class BattleSystemV2 : MonoBehaviour
     IEnumerator PerformActionSwitch(BattleAction action)
     {
         yield return StartCoroutine(RecallPokemon(action.attackingPokemon));
-        yield return StartCoroutine(SummonPokemon(action.attackingTrainer, action.swapWithPartyIndex));
+        yield return StartCoroutine(SummonPokemon(action.attackingPokemon.ownerTrainer, action.swapWithPartyIndex));
     }
     IEnumerator PerformActionBag(BattleAction action)
     {
@@ -362,7 +372,7 @@ public class BattleSystemV2 : MonoBehaviour
         {
             bool canRun = false;
             int attackerSpeed = action.attackingPokemon.basePartyPokemon.GetStatTuple(6).actual;
-            int targetSpeed = action.targetPokemon.basePartyPokemon.GetStatTuple(6).actual;
+            int targetSpeed = GetPokemonAtSlot(action.targetTeam).basePartyPokemon.GetStatTuple(6).actual;
             
             if (attackerSpeed >= targetSpeed)
             {
@@ -379,8 +389,8 @@ public class BattleSystemV2 : MonoBehaviour
             
             if (canRun)
             {
-                state = BattleState.Flee;
-                yield return StartCoroutine(EndBattle());
+                state = BattleState.End;
+                yield return StartCoroutine(EndBattle(EndType.Flee));
             }
         }
         else
@@ -392,7 +402,7 @@ public class BattleSystemV2 : MonoBehaviour
     {
         //save some characters...
         BattlePokemon attacker = action.attackingPokemon;
-        BattlePokemon target = action.targetPokemon;
+        BattlePokemon target = GetPokemonAtSlot(action.targetTeam);
         string attackerName = $"{GetPrefix(attacker)}{attacker.displayName}";
         string targetName = $"{GetPrefix(target)}{target.displayName}";
 
@@ -467,7 +477,7 @@ public class BattleSystemV2 : MonoBehaviour
         
         //TODO: targetting for multi-battles
         //If an attack has no target, the attack does nothing.
-        if (!action.targetPokemon.basePartyPokemon.UsableInBattle())
+        if (!target.basePartyPokemon.UsableInBattle())
         {
             yield return StartCoroutine(Typewriter.Instance.WriteText("But it did nothing!"));
             yield break;
@@ -546,11 +556,12 @@ public class BattleSystemV2 : MonoBehaviour
             // "If this attack is successful" effects
             // Additional effects
             // An additional effect won’t occur on a target if it has zero HP remaining, but will occur on its user (such as Metal Claw’s additional effect) even if the target is defeated.
-            if (IsEffectSuccessful(action)) yield return StartCoroutine(ApplyMoveEffect(action));
+            if (IsEffectSuccessful(action)) yield return StartCoroutine(ApplyMoveEffect(action, actualDamage));
 
             // TODO: Rage
             // TODO: Ability effects, using the ability the target/user had when the damage was dealt
             // TODO: Enigma Berry, Jaboca Berry, Rowap Berry, Sticky Barb
+            //if (!target.basePartyPokemon.UsableInBattle()) yield return StartCoroutine(PerformFaint(target));
             // The target thaws out if attack is a Fire-type attack
             if (target.basePartyPokemon.status == Status.Frozen && GameManager.Instance.registry.GetTypeByID(action.move.typeID).identifier.Equals("fire"))
             {
@@ -571,11 +582,12 @@ public class BattleSystemV2 : MonoBehaviour
                 yield return StartCoroutine(AnimationChangeHP(attacker, Mathf.Max(attacker.basePartyPokemon.GetStatTuple(1).actual, newHP)));
             }
             // TODO: For Selfdestruct/Explosion/Memento, the above effects resolve for each target before the user faints.
+            target.lastMoveUsedAgainstThis = action.move;
         }
         else //if it is a status move
         {
             yield return StartCoroutine(AnimationGenericSelfStatusMove(attacker.gameObject));
-            if (IsEffectSuccessful(action)) yield return StartCoroutine(ApplyMoveEffect(action));
+            if (IsEffectSuccessful(action)) yield return StartCoroutine(ApplyMoveEffect(action, 0));
             else yield return StartCoroutine(Typewriter.Instance.WriteText("But it failed!"));
         }
 
@@ -586,16 +598,19 @@ public class BattleSystemV2 : MonoBehaviour
             int resultingHP = Mathf.Clamp(attacker.basePartyPokemon.GetCurrentHP()+heal, 0, attacker.basePartyPokemon.GetStatTuple(1).actual);
             yield return StartCoroutine(AnimationChangeHP(attacker, resultingHP));
         }
+
+        //self destruct effect calculation. will occur regardless of hit or miss
+        if (action.move.effect.id == 8) yield return StartCoroutine(AnimationChangeHP(attacker, 0, 2f));
         yield return new WaitForSeconds(WAIT_TIME);
     }
 
     IEnumerator PostActionPhase()
     {
         state = BattleState.PostAction;
-        List<BattlePokemon> activePokemon = GetAllPokemon();
+        List<BattlePokemon> fieldPokemon = GetAllFieldPokemon();
 
         //apply any post-action effect for each pokemon
-        for (int i = 0; i < activePokemon.Count; i++)
+        foreach (BattlePokemon pokemon in fieldPokemon)
         {
             // TODO: Reflect
             // TODO: Light Screen
@@ -613,23 +628,23 @@ public class BattleSystemV2 : MonoBehaviour
             // TODO: Shed Skin/Speed Boost/Truant
             // TODO: Black Sludge/Leftovers
             // Poison
-            if (activePokemon[i].basePartyPokemon.status == Status.Poisoned)
+            if (pokemon.basePartyPokemon.status == Status.Poisoned && pokemon.basePartyPokemon.UsableInBattle())
             {
-                float damage = ((float)activePokemon[i].basePartyPokemon.GetStatTuple(1).actual/8f);
-                int resultingHP = Mathf.Max(activePokemon[i].basePartyPokemon.GetCurrentHP()-(int)damage, 0);
+                float damage = ((float)pokemon.basePartyPokemon.GetStatTuple(1).actual/8f);
+                int resultingHP = Mathf.Max(pokemon.basePartyPokemon.GetCurrentHP()-(int)damage, 0);
                 //TODO: poison particle
-                yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(activePokemon[i])}{activePokemon[i].displayName} was hurt by poison!"));
-                yield return StartCoroutine(AnimationChangeHP(activePokemon[i], resultingHP));
+                yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(pokemon)}{pokemon.displayName} was hurt by poison!"));
+                yield return StartCoroutine(AnimationChangeHP(pokemon, resultingHP));
             }
             // TODO: Toxic
             // Burn
-            if (allyPokemon.basePartyPokemon.status == Status.Burnt)
+            if (pokemon.basePartyPokemon.status == Status.Burnt && pokemon.basePartyPokemon.UsableInBattle())
             {
-                float damage = ((float)activePokemon[i].basePartyPokemon.GetStatTuple(1).actual/8f);
-                int resultingHP = Mathf.Max(activePokemon[i].basePartyPokemon.GetCurrentHP()-(int)damage, 0);
+                float damage = ((float)pokemon.basePartyPokemon.GetStatTuple(1).actual/8f);
+                int resultingHP = Mathf.Max(pokemon.basePartyPokemon.GetCurrentHP()-(int)damage, 0);
                 //TODO: burn particle
-                yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(activePokemon[i])}{activePokemon[i].displayName} was damaged by a burn!"));
-                yield return StartCoroutine(AnimationChangeHP(activePokemon[i], resultingHP));
+                yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(pokemon)}{pokemon.displayName} was damaged by a burn!"));
+                yield return StartCoroutine(AnimationChangeHP(pokemon, resultingHP));
             }
             // TODO: Nightmare
             // TODO: Curse
@@ -648,56 +663,56 @@ public class BattleSystemV2 : MonoBehaviour
             // TODO: Future Sight/Doom Desire (resolved in targets' Turn order)
             // TODO: Perish Song (resolved in turn order)
             // TODO: Ideally after fainted pokemon switch: Effects from abilities, form changes, items (see above). For Pokémon that have Slow Start and just entered the battle from fainted ones, the Slow Start effect begins (in turn order).
-            yield return new WaitForSeconds(1f);
+            if (!pokemon.basePartyPokemon.UsableInBattle()) yield return StartCoroutine(PerformFaint(pokemon));
         }
-        yield return StartCoroutine(SwitchOutFaintedPokemon());
+
+        //clear fainted pokemon from the field
+        //distribute exp to player
+        foreach (BattlePokemon pokemon in fieldPokemon)
+        {
+            if (!pokemon.basePartyPokemon.UsableInBattle())
+            {
+                //exp gain sequence for each fainted opponent to player
+                if (allyPokemon.basePartyPokemon.UsableInBattle() && pokemon.team == Team.Foe)
+                {
+                    BattleCalculator.ApplyEVs(allyPokemon.basePartyPokemon, pokemon.basePartyPokemon);
+                    yield return StartCoroutine(AnimationGainExp(
+                        allyPokemon,
+                        BattleCalculator.CalculateExpGain(allyPokemon.basePartyPokemon, pokemon.basePartyPokemon))
+                    );
+                }
+                CleanUpPokemon(pokemon);
+            }
+        }
+
+        if (player.GetNumberUsablePokemon() == 0)
+        {
+            yield return StartCoroutine(Typewriter.Instance.WriteText($"You are out of usable Pokemon!"));
+            state = BattleState.End;
+            yield return EndBattle(EndType.Loss);
+        }
     }
 
-    IEnumerator SwitchOutFaintedPokemon()
+    IEnumerator SwitchOutPhase()
     {
-        if (!allyPokemon.basePartyPokemon.UsableInBattle())
-        {
-            //ally picks a pokemon from party
-            yield return StartCoroutine(AnimationFaint(allyPokemon));
-            yield return StartCoroutine(Typewriter.Instance.WriteText($"Oh no! {allyPokemon.displayName} fainted!"));
-
-            if (player.GetNumberUsablePokemon() == 0)
-            {
-                yield return StartCoroutine(Typewriter.Instance.WriteText($"You are out of usable Pokemon!"));
-                state = BattleState.Loss;
-                yield return EndBattle();
-                yield break;
-            }
-            PartyMenu.Instance.currentSwapType = SwapType.OnFaintedAlly;
-            UISwitchPerformed = false;
-            PartyMenu.Instance.ShowMenu();
-            yield return new WaitUntil(() => UISwitchPerformed);
-            UISwitchPerformed = false;
-        }
         if (!foePokemon.basePartyPokemon.UsableInBattle())
         {
-            yield return StartCoroutine(AnimationFaint(foePokemon));
-            yield return StartCoroutine(RecallPokemon(foePokemon));
-            yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(foePokemon)}{foePokemon.displayName} has fainted!"));
-            
-            //exp gain sequence
-            BattleCalculator.ApplyEVs(allyPokemon, foePokemon);
-            yield return StartCoroutine(AnimationGainExp(allyPokemon, BattleCalculator.CalculateExpGain(allyPokemon, foePokemon)));
-
             int nextPokemonIndex = BattleCalculator.AITrainerGetIndexNextPokemon();
             //if -1 is returned, all of the pokemon have fainted
             if (nextPokemonIndex == -1)
             {
-                state = BattleState.Win;
-                yield return StartCoroutine(EndBattle());
+                state = BattleState.End;
+                yield return StartCoroutine(EndBattle(EndType.Win));
             }
-            else
+            yield return StartCoroutine(Typewriter.Instance.WriteText($"{foe} is about to send out {foe.party[nextPokemonIndex].GetName()}."));
+
+            if (allyPokemon.basePartyPokemon.UsableInBattle())
             {
-                if (player.GetNumberUsablePokemon() > 0)
+                if (player.GetNumberUsablePokemon() > 1)
                 {
-                    yield return StartCoroutine(Typewriter.Instance.WriteText($"{foe} is about to send out {foe.party[nextPokemonIndex].GetName()}."));
                     yield return StartCoroutine(Typewriter.Instance.WriteText($"Would you like to switch out {allyPokemon.displayName}?"));
                     Typewriter.Instance.ShowOptions("Switch out Pokemon", "Keep Going");
+                    PartyMenu.Instance.currentSwapType = SwapType.BattleActionSwap;
                     UISwitchPerformed = false;
                     yield return new WaitUntil(() => Typewriter.Instance.GetSelectedDialog() != null);
                     Typewriter.Instance.HideOptions();
@@ -708,16 +723,41 @@ public class BattleSystemV2 : MonoBehaviour
                     }
                     UISwitchPerformed = true;
                 }
-                yield return StartCoroutine(SummonPokemon(foe, nextPokemonIndex));
+            }
+            else
+            {
+                PartyMenu.Instance.currentSwapType = SwapType.OnFaintedAlly;
+                UISwitchPerformed = false;
+                ShowPartyMenuForSwitchOut();
+                yield return new WaitUntil(() => UISwitchPerformed);
+                UISwitchPerformed = true;
+            }
+            yield return StartCoroutine(SummonPokemon(foe, nextPokemonIndex));
+        }
+        else //foe is alive
+        {
+            if (!allyPokemon.basePartyPokemon.UsableInBattle())
+            {
+                PartyMenu.Instance.currentSwapType = SwapType.OnFaintedAlly;
+                UISwitchPerformed = false;
+                ShowPartyMenuForSwitchOut();
+                yield return new WaitUntil(() => UISwitchPerformed);
+                UISwitchPerformed = true;
             }
         }
-        yield return null;
     }
-    IEnumerator EndBattle()
+    IEnumerator PerformFaint(BattlePokemon victim)
     {
-        switch (state)
+        yield return StartCoroutine(AnimationFaint(victim));
+        if (victim.team == Team.Ally) yield return StartCoroutine(Typewriter.Instance.WriteText($"Oh no! {allyPokemon.displayName} fainted!"));
+        else yield return StartCoroutine(Typewriter.Instance.WriteText($"{GetPrefix(foePokemon)}{foePokemon.displayName} has fainted!"));
+    }
+    IEnumerator EndBattle(EndType endType)
+    {
+        if (state != BattleState.End) yield break;
+        switch (endType)
         {
-            case BattleState.Win:
+            case EndType.Win:
                 if (battleType == BattleType.Trainer)
                 {
                     int moneyGain = foe.MoneyAfterBattleLoss();
@@ -727,13 +767,13 @@ public class BattleSystemV2 : MonoBehaviour
                     yield return StartCoroutine(Typewriter.Instance.WriteText($"{player} got ${moneyGain} for winning."));
                 }
                 break;
-            case BattleState.Loss:
+            case EndType.Loss:
                 int moneyLoss = player.MoneyAfterBattleLoss();
                 GameManager.Instance.player.UpdateMoney(-player.MoneyAfterBattleLoss());
                 yield return StartCoroutine(Typewriter.Instance.WriteText($"You lost ${moneyLoss} for losing the battle."));
                 //TODO: scurry to pokemon center text
                 break;
-            case BattleState.Flee:
+            case EndType.Flee:
                 yield return StartCoroutine(Typewriter.Instance.WriteText($"{player} fled."));
                 break;
         }
@@ -751,7 +791,19 @@ public class BattleSystemV2 : MonoBehaviour
     .##.....##.##.......##.......##........##.......##....##..##....##
     .##.....##.########.########.##........########.##.....##..######.
     */
-    public List<BattlePokemon> GetAllPokemon()
+    public BattlePokemon GetPokemonAtSlot(Team targetTeam, int targetIndex=0)
+    {
+        //for single battles only
+        if (targetTeam == Team.Foe)
+        {
+            return foePokemon;
+        }
+        else
+        {
+            return allyPokemon;
+        }
+    }
+    public List<BattlePokemon> GetAllAlivePokemon()
     {
         // TODO: If more than one Pokémon is switched in from fainted ones at the same time, new ones are switched in in the order of leader-first, opposing-first, leader-second, opposing-second. Each Pokémon switched in this way enters the battle before the next Pokémon is chosen.
         List<BattlePokemon> activePokemon = new List<BattlePokemon>();
@@ -764,6 +816,13 @@ public class BattleSystemV2 : MonoBehaviour
             activePokemon.Add(foePokemon);
         }
         return activePokemon;
+    }
+    public List<BattlePokemon> GetAllFieldPokemon()
+    {
+        List<BattlePokemon> pokemon = new List<BattlePokemon>();
+        pokemon.Add(allyPokemon);
+        pokemon.Add(foePokemon);
+        return pokemon;
     }
     public string GetPrefix(BattlePokemon pokemon)
     {
@@ -884,22 +943,33 @@ public class BattleSystemV2 : MonoBehaviour
         }
     }
 
-    IEnumerator RecallPokemon(BattlePokemon pokemon, int fieldIndex=0)
+    //when the pokemon is recalled from the field from an action party switch or move
+    IEnumerator RecallPokemon(BattlePokemon pokemon)
     {
-        BattlePokemon recalledPokemon = pokemon;
-
-        Destroy(recalledPokemon.GetAccompanyingHUD().gameObject);
-        SpriteRenderer sprite = recalledPokemon.GetComponentInChildren<SpriteRenderer>();
+        if (pokemon == null)
+        {
+            Debug.LogWarning("Attempt to recall pokemon failed; pokemon does not exist");
+            yield break;
+        }
+        SpriteRenderer sprite = pokemon.GetComponentInChildren<SpriteRenderer>();
         float counter = 0f;
         float duration = 0.15f;
 
         while (counter < duration)
         {
             counter += Time.deltaTime;
-            recalledPokemon.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, counter / duration);
+            pokemon.transform.localScale = Vector3.Lerp(Vector3.one, Vector3.zero, counter / duration);
             yield return null;
         }
-        Destroy(recalledPokemon.gameObject);
+        CleanUpPokemon(pokemon);
+    }
+
+    //when the pokemon is removed from the field via switch or faint. called at the end of that function
+    private void CleanUpPokemon(BattlePokemon pokemon)
+    {
+        Debug.Log($"Removing {pokemon.displayName} from field");
+        Destroy(pokemon.GetAccompanyingHUD().gameObject);
+        Destroy(pokemon.gameObject);
     }
     public void ShowPartyMenuForSwitchOut()
     {
@@ -1024,6 +1094,7 @@ public class BattleSystemV2 : MonoBehaviour
     {
         //TODO: pokemon cry
         yield return new WaitForSeconds(WAIT_TIME);
+        
         SpriteRenderer sprite = faintedPokemon.GetComponentInChildren<SpriteRenderer>();
         Vector3 startPos = faintedPokemon.transform.position;
         Vector3 endPos = new Vector3(faintedPokemon.transform.position.x, faintedPokemon.transform.position.y-3, faintedPokemon.transform.position.z);
@@ -1070,12 +1141,12 @@ public class BattleSystemV2 : MonoBehaviour
         }
     }
 
-    IEnumerator AnimationChangeHP(BattlePokemon pokemon, int endHP)
+    IEnumerator AnimationChangeHP(BattlePokemon pokemon, int endHP, float speedMultiplier=1f)
     {
         int startHP = pokemon.basePartyPokemon.GetCurrentHP();
         int hp = startHP;
         float counter = 0f;
-        float duration = Mathf.Abs(startHP-endHP)/32f;
+        float duration = Mathf.Abs(startHP-endHP)/32f/speedMultiplier;
         
         while (hp != endHP)
         {
@@ -1144,7 +1215,9 @@ public class BattleSystemV2 : MonoBehaviour
     */
 
     /*
-    select id as moveID, identifier, effect_id, effect_chance, short_effect, effect, power, pp, accuracy,  min_hits, max_hits, min_turns, max_turns, drain, healing, crit_rate, ailment_chance, flinch_chance, stat_chance
+    select id as moveID, damage_class_id as class, identifier as id, effect_id as effect, effect_chance as eff_chance, short_effect as short,
+		effect, power, pp, accuracy as acc, min_hits as minH, max_hits as maxH, min_turns as minT, max_turns as maxT, drain, healing as heal,
+		crit_rate as crit, ailment_chance as ail_c, flinch_chance as fli_c, stat_chance as stat_c
     from moves m, move_meta mm, move_effect_prose me
     where m.id=mm.move_id and m.effect_id=me.move_effect_id and local_language_id=9
     order by move_effect_id, id
@@ -1154,24 +1227,30 @@ public class BattleSystemV2 : MonoBehaviour
     {
         bool isDamagingAttack = action.move.damageClass == DamageClass.Physical || action.move.damageClass == DamageClass.Special;
         Move move = action.move;
+        BattlePokemon target = GetPokemonAtSlot(action.targetTeam);
+        BattlePokemon attacker = action.attackingPokemon;
         switch (move.effect.id)
         {
             case 1: return true;
-            case 2: return (action.targetPokemon.basePartyPokemon.status != Status.Sleep);
-            case 3: return (action.targetPokemon.basePartyPokemon.status != Status.Poisoned);
+            case 2: return (target.basePartyPokemon.status != Status.Sleep);
+            case 3: return (target.basePartyPokemon.status != Status.Poisoned);
             case 4: return true;
-            case 5: return (action.targetPokemon.basePartyPokemon.status != Status.Burnt);
-            case 6: return (action.targetPokemon.basePartyPokemon.status != Status.Frozen);
-            case 7: return (action.targetPokemon.basePartyPokemon.status != Status.Paralyzed);
+            case 5: return (target.basePartyPokemon.status != Status.Burnt);
+            case 6: return (target.basePartyPokemon.status != Status.Frozen);
+            case 7: return (target.basePartyPokemon.status != Status.Paralyzed);
+            case 8: return true;
+            case 9: return (target.basePartyPokemon.status == Status.Sleep);
+            case 10: return (action.attackingPokemon.lastMoveUsedAgainstThis != null);
             default: return true;
         }
     }
 
     //the use of this function assumes that the effect is successful.
     //even if a stage is at maximum, stage changes will still occur, but when they are updated in a different function, nothing will happen
-    IEnumerator ApplyMoveEffect(BattleAction action)
+    IEnumerator ApplyMoveEffect(BattleAction action, int damageDealt)
     {
-        bool willOccur = (UnityEngine.Random.Range(0f, 1f) < BattleCalculator.CalculateEffectChance(action.move) && action.targetPokemon.basePartyPokemon.GetCurrentHP() > 0);
+        bool willOccur = (UnityEngine.Random.Range(0f, 1f) < BattleCalculator.CalculateEffectChance(action.move) &&
+                            GetPokemonAtSlot(action.targetTeam).basePartyPokemon.GetCurrentHP() > 0);
         if (!willOccur)
         {
             Debug.Log("Effect chance failed. No effect will happen");
@@ -1179,7 +1258,7 @@ public class BattleSystemV2 : MonoBehaviour
         }
         Move move = action.move;
         BattlePokemon attacker = action.attackingPokemon;
-        BattlePokemon target = action.targetPokemon;
+        BattlePokemon target = GetPokemonAtSlot(action.targetTeam);
         
         switch (move.effect.id)
         {
@@ -1197,6 +1276,7 @@ public class BattleSystemV2 : MonoBehaviour
                 break;
             case 4:
                 Debug.Log("Inflicts [regular damage]{mechanic:regular-damage}.  [Drains]{mechanic:drain} half the damage inflicted to heal the user.");
+                //handled in drain part of perform action move function
                 break;
             case 5:
                 Debug.Log("Inflicts [regular damage]{mechanic:regular-damage}.  Has a $effect_chance% chance to [burn]{mechanic:burn} the target.");
@@ -1210,8 +1290,17 @@ public class BattleSystemV2 : MonoBehaviour
                 Debug.Log("Inflicts [regular damage]{mechanic:regular-damage}.  Has a $effect_chance% chance to [paralyze]{mechanic:paralyze} the target.");
                 yield return StartCoroutine(SetStatus(target, Status.Paralyzed));
                 break;
+            case 8:
+                Debug.Log("User [faint]{mechanic:faint}s, even if the attack [fail]{mechanic:fail}s or [miss]{mechanic:miss}es.  Inflicts [regular damage]{mechanic:regular-damage}.");
+                //handled in perform action move function
+                break;
+            case 9:
+                Debug.Log("User [faint]{mechanic:faint}s, even if the attack [fail]{mechanic:fail}s or [miss]{mechanic:miss}es.  Inflicts [regular damage]{mechanic:regular-damage}.");
+                int newHP = Mathf.Max(attacker.basePartyPokemon.GetStatTuple(1).actual, (damageDealt/2)+attacker.basePartyPokemon.GetCurrentHP());
+                yield return StartCoroutine(AnimationChangeHP(attacker, newHP));
+                break;
             default:
-                Typewriter.Instance.WriteText($"The effect for {move.name} has not been implemented!");
+                Debug.LogWarning($"The effect for {move.name} has not been implemented!");
                 break;
         }
         yield return null;
